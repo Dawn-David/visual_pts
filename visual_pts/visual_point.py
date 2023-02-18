@@ -1,8 +1,8 @@
 '''
 Author: LLG
 Date: 2021-09-18 15:23:27
-LastEditors: LLG
-LastEditTime: 2021-09-19 18:01:09
+LastEditors: Lianguang Liu
+LastEditTime: 2023-02-18 14:25:52
 Description: file content
 '''
 
@@ -17,16 +17,20 @@ class Point_IO(Visual):
         Specific class for point cloud load, save and visialization.
         Inherited from Visual class.
     Input:
-        data_path: The path of point cloud, including .xyz, .txt, .asc and .off.
+        "data_path": The path of point cloud, including .xyz, .txt, .asc and .off.
+        "col": "Optional('height'(default) ==> color changes along z axis, 'distance' ==> color changes along x-o-y plane, 'intensity' ==> color changes along intensity)",
+        "pts_size": "point size",
     '''
     
-    def __init__(self, data_path, skiprows=0, strip=True):
+    def __init__(self, data_path, skiprows=0, strip=True, pts_size = 1, col = 'height'):
         super().__init__()
         assert data_path.split(".")[-1] in ['xyz', 'txt', 'asc', 'off'], "file could only be xyz, txt, asc or off"
         self.data_path = data_path
         self.axis_range = 1
         self.skiprows = skiprows
         self.strip = strip
+        self.pts_size = pts_size
+        self.col = col
 
     def loadmesh(self):
         fn = self.data_path
@@ -54,10 +58,14 @@ class Point_IO(Visual):
         else:
             raise ValueError('{}: Unknown filetype'.format(fn))
         
-    def draw_scenes(self, fig_name=None):
+    def draw_scenes(self, fig_name=None, axis_visible = True):
+        '''
+        Input:
+            "axis_visible": Visibility of the axis.
+        '''
         self.pts = self.loadmesh()
-        self.pts = self.pts[:, 0:3]
-        super().draw_scenes(fig_name)
+        self.pts = self.pts[:, 0:4]
+        super().draw_scenes(fig_name, axis_visible)
 
 def loadtxt(fn, delimiter=',', comments='#', skiprows=0, strip=True):
     result = []

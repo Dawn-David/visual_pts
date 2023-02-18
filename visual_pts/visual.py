@@ -264,7 +264,7 @@ class Visual(object):
             )
         return pts
 
-    def draw_scenes(self, fig_name=None):
+    def draw_scenes(self, fig_name=None, axis_visible = True):
         assert self.pts is not None, "there are no point clouds to visiliaze."
         points = self.visualize_pts(self.pts)
         data = [points]
@@ -297,9 +297,9 @@ class Visual(object):
         # TODO: Optimized to auto zoom canvas ratio
         layout=dict(
             scene=dict(
-                xaxis=dict(visible=True),
-                yaxis=dict(visible=True),
-                zaxis=dict(visible=True)
+                xaxis = dict(visible = axis_visible),
+                yaxis = dict(visible = axis_visible),
+                zaxis = dict(visible = axis_visible)
             )
         )
         fig = go.Figure(
